@@ -11,8 +11,6 @@ for (var i in numbers) {
 
 app.get('/twilio/voice', function (req, res) {
     var query = req.query;
-    console.log(query.AccountSid == twilioSID, twilioSID);
-    console.log(validNumbers[query.From]);
     if (query.AccountSid == twilioSID && validNumbers[query.From]) {
         res.send('<?xml version="1.0" encoding="UTF-8"?>' +
                  '<Response>' +
