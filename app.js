@@ -1,3 +1,7 @@
+if (process.env.NEWRELIC_KEY) {
+    require('newrelic');
+}
+
 var express = require('express');
 var app = express();
 
