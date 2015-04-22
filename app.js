@@ -11,12 +11,19 @@ for (var i in numbers) {
 
 app.get('/twilio/voice', function (req, res) {
     var query = req.query;
-    if (query.AccountSid == twilioSID && validNumbers[query.from]) {
+    console.log(query.AccountSid == twilioSID, twilioSID);
+    console.log(validNumbers[query.From]);
+    if (query.AccountSid == twilioSID && validNumbers[query.From]) {
         res.send('<?xml version="1.0" encoding="UTF-8"?>' +
                  '<Response>' +
                      '<Play digits="www9"/>' +
                      '</Response>');
     }
+    res.send();
+});
+
+app.get('/heartbeat', function (req, res) {
+    res.send('alive');
 });
 
 var server = app.listen(port, function () {
