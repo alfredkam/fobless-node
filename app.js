@@ -16,14 +16,19 @@ var emailName = process.env.EMAIL_FROM || null;
 var emailPw = process.env.EMAIL_FROM_PASSWORD || null;
 var emailTo = process.env.EMAIL_TO || null;
 
-var server  = emailName && emailPw && emailTo ? email.server.connect({
+var server  = emailName && (emailName && emailPw && emailTo) ? email.server.connect({
    user:    emailName,
    password: emailPw,
    host:    "smtp.gmail.com",
    ssl:     true
 }) : null;
 
-console.log(server)
+server.send({
+   text:    "Door opened",
+   from:    "Carrot Bot <"+ emailName + ">",
+   to:      emailTo,
+   subject: "Door opened"
+}, function(err, message) { console.log(err || message); });
 
 for (var i in numbers) {
     validNumbers[numbers[i]] = true;
