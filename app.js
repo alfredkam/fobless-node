@@ -4,6 +4,7 @@ if (process.env.NEWRELIC_KEY) {
 
 var express = require('express');
 var app = express();
+var email   = require("emailjs/email");
 
 var port = process.env.PORT || 3000;
 var twilioSID = process.env.TWILIO_ACCOUNT_SID || '';
@@ -11,6 +12,16 @@ var numbers = (process.env.AUTHORIZED_NUMBERS || '').split(",");
 var validNumbers = {};
 var forwardNumber = process.env.FORWARD_NUMBER || null;
 var smsNumber = process.env.SMS_NUMBER || null;
+var emailName = process.env.EMAIL_FROM || null;
+var emailPw = process.env.EMAIL_FROM_PASSWORD || null;
+var emailTo = process.env.EMAIL_TO || null;
+
+var server  = emailName && (emailName && emailPw && emailTo) ? email.server.connect({
+   user:    emailName,
+   password: emailPw,
+   host:    "smtp.gmail.com",
+   ssl:     true
+}) : null;
 
 for (var i in numbers) {
     validNumbers[numbers[i]] = true;
@@ -24,6 +35,15 @@ app.get('/twilio/voice', function (req, res) {
                      '<Play digits="www9"/>' +
                      (smsNumber ? '<Sms to="'+ smsNumber + '">Door opened.</Sms>' : '')+
                      '</Response>');
+        if (server) {
+          server.send({
+             text:    "Door opened",
+             from:    "Carrot Bot <"+ emailName + ">",
+             to:      emailTo,
+             subject: "Door opened"
+          }, function(err, message) { console.log(err || message); });
+        }
+
     } else if (query.AccountSid == twilioSID && forwardNumber) {
       res.send('<?xml version="1.0" encoding="UTF-8"?>' +
                '<Response>' +
