@@ -10,6 +10,7 @@
   "author": "alfred kam <kam.alfred@gmail.com> (http://alfredkam.com/)",
   "license": "MIT",
   "dependencies": {
+    "emailjs": "^1.0.4",
     "express": "^4.12.3",
     "forever": "^0.14.1",
     "newrelic": "^1.18.3"
